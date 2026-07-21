@@ -62,3 +62,34 @@ resource "aws_route_table_association" "private_1_assoc" {
   subnet_id      = aws_subnet.private_1.id
   route_table_id = aws_route_table.private.id
 }
+
+# --- Multi-AZ Expansion (us-east-1b) ---
+
+# Public Subnet in AZ2 - hosting secondary Load Balancer nodes
+resource "aws_subnet" "public_2" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.2.0/24"
+  availability_zone       = "us-east-1b"
+  map_public_ip_on_launch = true
+  tags                    = { Name = "AI-Public-Subnet-2" }
+}
+
+# Private Subnet in AZ2 - hosting secondary backend/ASG servers
+resource "aws_subnet" "private_2" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.4.0/24"
+  availability_zone = "us-east-1b"
+  tags              = { Name = "AI-Private-Subnet-2" }
+}
+
+# Associate Public Subnet 2 with the Public Route Table (pointing to IGW)
+resource "aws_route_table_association" "public_2_assoc" {
+  subnet_id      = aws_subnet.public_2.id
+  route_table_id = aws_route_table.public.id
+}
+
+# Associate Private Subnet 2 with the Private Route Table (pointing to NAT Gateway)
+resource "aws_route_table_association" "private_2_assoc" {
+  subnet_id      = aws_subnet.private_2.id
+  route_table_id = aws_route_table.private.id
+}
