@@ -103,7 +103,6 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
-# Bastion Host Instance in Public Subnet
 resource "aws_instance" "bastion" {
   ami                         = data.aws_ami.amazon_linux.id
   instance_type               = "t3.micro"
@@ -111,8 +110,8 @@ resource "aws_instance" "bastion" {
   associate_public_ip_address = true
   vpc_security_group_ids      = [aws_security_group.bastion_sg.id]
   
-  # Optional: Add your key_name if you have an SSH key created in AWS
-  # key_name                  = "my-ssh-key"
+  # IAM Role Bastion:
+  iam_instance_profile        = aws_iam_instance_profile.instance_profile.name
 
   tags = {
     Name = "Bastion-Host"

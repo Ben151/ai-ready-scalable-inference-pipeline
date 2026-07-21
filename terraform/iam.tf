@@ -27,3 +27,9 @@ resource "aws_iam_instance_profile" "instance_profile" {
   name = "ai-infra-instance-profile"
   role = aws_iam_role.instance_role.name
 }
+
+# Attach AWS Managed Policy for Systems Manager (SSM) so we can connect without .pem keys
+resource "aws_iam_role_policy_attachment "ssm_server" {
+  role       = aws_iam_role.instance_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
