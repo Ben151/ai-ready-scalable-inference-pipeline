@@ -2,7 +2,7 @@
 resource "aws_launch_template" "ai_server_lt" {
   name_prefix   = "ai-server-lt-"
   image_id      = data.aws_ami.amazon_linux.id
-  instance_type = "t2.micro" # ניתן לשדרג ל-GPU/instance גדול יותר בהמשך
+  instance_type = "t3.micro"
 
   network_interfaces {
     associate_public_ip_address = false

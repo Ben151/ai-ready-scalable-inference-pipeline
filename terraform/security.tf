@@ -106,7 +106,7 @@ data "aws_ami" "amazon_linux" {
 # Bastion Host Instance in Public Subnet
 resource "aws_instance" "bastion" {
   ami                         = data.aws_ami.amazon_linux.id
-  instance_type               = "t2.micro"
+  instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.public_1.id
   associate_public_ip_address = true
   vpc_security_group_ids      = [aws_security_group.bastion_sg.id]
